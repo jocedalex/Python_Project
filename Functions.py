@@ -45,7 +45,7 @@ def add_student(name,document,email,phone):
             db['students'].append(data)
             
             with open('database.json','w') as json_file:
-                json.dump(db, outfile)
+                json.dump(db, json_file)
 
 #----------Create new courses
 def add_course(name,sessions,start,end,time):

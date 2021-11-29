@@ -1,5 +1,6 @@
 import tkinter as tk                    
 from tkinter import ttk
+from Functions import *
 
 
 #---User interface basic config
@@ -24,12 +25,17 @@ tabControl.add(tab3, text ='Link')
 tabControl.pack(expand = 1, fill ="both")
 
 #-----Add elements to register TAB----------------------------------
+
+nameR=tk.StringVar()
+idR=tk.StringVar()
+emailR=tk.StringVar()
+phoneR=tk.StringVar()
   
 ttk.Label(tab1, text ="Name:").grid(column = 0, 
                                row = 0,
                                padx = 10,
                                pady = 10)
-nameReg=ttk.Entry(tab1).grid(column = 1, 
+nameReg=ttk.Entry(tab1, textvariable=nameR).grid(column = 1, 
                                row = 0,
                                padx = 10,
                                pady = 10)#Name
@@ -39,7 +45,7 @@ ttk.Label(tab1,
                                row = 0,
                                padx = 10,
                                pady = 10)
-idReg=ttk.Entry(tab1).grid(column = 3, 
+idReg=ttk.Entry(tab1, textvariable=idR).grid(column = 3, 
                                row = 0,
                                padx = 10,
                                pady = 10)#ID
@@ -48,7 +54,7 @@ ttk.Label(tab1, text ="Email:").grid(column = 0,
                                row = 1,
                                padx = 10,
                                pady = 10)
-emailReg=ttk.Entry(tab1).grid(column = 1, 
+emailReg=ttk.Entry(tab1, textvariable=emailR).grid(column = 1, 
                                row = 1,
                                padx = 10,
                                pady = 10)#Email
@@ -57,12 +63,12 @@ ttk.Label(tab1, text ="Phone #:").grid(column = 2,
                                row = 1,
                                padx = 10,
                                pady = 10)
-phoneReg=ttk.Entry(tab1).grid(column = 3, 
+phoneReg=ttk.Entry(tab1, textvariable=phoneR).grid(column = 3, 
                                row = 1,
                                padx = 10,
                                pady = 10)#Phone
 
-ttk.Button(tab1,text="Register").grid( 
+button = ttk.Button(tab1,text="Register",command=add_student(nameR.get(),idR.get(),emailR.get(),phoneR.get())).grid( 
                                row = 2,
                                padx = 10,
                                pady = 10,columnspan=4)
