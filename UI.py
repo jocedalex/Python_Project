@@ -24,8 +24,31 @@ def update3(course):#students for specific course
     studentsC.delete('1.0','end')
     studentsC.insert(1.0,studentsCourse)
     studentsC.config(state='disabled')
-    
 
+##Delete an update Items
+def deletion(parameter, field):
+    
+    delete(parameter,field)
+    if field == 'courses':
+        courseListD = courses_listname()
+        idCourseD['values']=coursesListD
+    else:
+        studentsListD = students_listname()
+        idStudentD['values']=studentsListD
+
+def updateLink():
+    coursesList=courses_listname()#List of available courses
+    studentsList=students_listname()#List of active students
+
+    idCourse['values']=coursesList
+    idStudent['values']=studentsList
+
+def updateDeletion():
+    coursesListD=courses_listname()#List of available courses
+    studentsListD=students_listname()#List of active students
+
+    idCourseD['values']=coursesListD
+    idStudentD['values']=studentsListD
 
 #---User interface basic config
 screen=tk.Tk()
@@ -42,10 +65,12 @@ tabControl = ttk.Notebook(screen)
 tab1 = ttk.Frame(tabControl)
 tab2 = ttk.Frame(tabControl)
 tab3 = ttk.Frame(tabControl)
+tab4 = ttk.Frame(tabControl)
   
 tabControl.add(tab1, text ='Sign Up')
 tabControl.add(tab2, text ='Courses')
 tabControl.add(tab3, text ='Link')
+tabControl.add(tab4, text ='Remove Data')
 tabControl.pack(expand = 1, fill ="both")
 
 #-----Add elements to register TAB----------------------------------STUDENTS
@@ -107,7 +132,7 @@ ttk.Label(tab1, text ="---Students list---").grid(column = 0,
                                columnspan = 4, 
                                padx = 10,
                                pady = 10)
-studentsReg= tk.Text(tab1, width = 50, height= 15)
+studentsReg= tk.Text(tab1, width = 65, height= 15)
 studentsReg.insert(1.0,studentsR)
 studentsReg.config(state='disabled')
 studentsReg.grid(column = 0, 
@@ -180,7 +205,7 @@ ttk.Label(tab2, text ="---Courses list---").grid(column = 0,
                                columnspan = 4, 
                                padx = 10,
                                pady = 10)
-coursesReg= tk.Text(tab2, width = 50, height= 15)
+coursesReg= tk.Text(tab2, width = 65, height= 15)
 coursesReg.insert(1.0,coursesR)
 coursesReg.config(state='disabled')
 coursesReg.grid(column = 0, 
@@ -208,40 +233,34 @@ coursesList=courses_listname()#List of available courses
 studentsList=students_listname()#List of active students
 studentsCourse=''
 
-variable = tk.StringVar(tab3)
-variable.set(coursesList[0]) # default value
-variable2 = tk.StringVar(tab3)
-variable2.set(studentsList[0]) # default value
 
+    
 ttk.Label(tab3, text ="Course:").grid(column = 0, 
                                row = 0,
                                padx = 10,
                                pady = 10)
 
-idCourse = tk.OptionMenu(tab3, variable, *coursesList).grid(column = 1, 
-                                                       row = 0,
-                                                       padx = 10,
-                                                       pady = 10)
+idCourse = ttk.Combobox(tab3,state='readonly')
+idCourse.grid(column = 1,row = 0,padx = 10,pady = 10)
+idCourse['values']=coursesList
 
-
-ttk.Label(tab3, text ="Student:").grid(column = 3, 
+ttk.Label(tab3, text ="Student:").grid(column = 2, 
                                row = 0,
                                padx = 10,
                                pady = 10)
 
-idStudent = tk.OptionMenu(tab3, variable2, *studentsList).grid(column = 4, 
-                                                       row = 0,
-                                                       padx = 10,
-                                                       pady = 10)
+idStudent = ttk.Combobox(tab3,state='readonly')
+idStudent.grid(column = 3,row = 0,padx = 10,pady = 10)
+idStudent['values']=studentsList
 
 
-buttonText3 = ttk.Button(tab3,text="Check",command=lambda:update3(variable.get())).grid(column = 0,
+buttonText3 = ttk.Button(tab3,text="Check",command=lambda:update3(idCourse.get())).grid(column = 0,
                                row = 1,
                                padx = 10,
                                pady = 10,columnspan=2)#Check students
 
 
-buttonText4 = ttk.Button(tab3,text="Sign up",command=lambda:sign_up(variable2.get(),variable.get())).grid(column = 2,
+buttonText4 = ttk.Button(tab3,text="Sign up",command=lambda:sign_up(idStudent.get(),idCourse.get())).grid(column = 2,
                                row = 1,
                                padx = 10,
                                pady = 10,columnspan=2)#Course suscription
@@ -251,7 +270,7 @@ ttk.Label(tab3, text ="---Students list---").grid(column = 0,
                                columnspan = 4, 
                                padx = 10,
                                pady = 10)
-studentsC= tk.Text(tab3, width = 50, height= 15)
+studentsC= tk.Text(tab3, width = 65, height= 15)
 studentsC.insert(1.0,studentsCourse)
 studentsC.config(state='disabled')
 studentsC.grid(column = 0, 
@@ -260,10 +279,61 @@ studentsC.grid(column = 0,
                  pady = 10,
                  columnspan=4)#Students list for an specific course
 
-scrollBar3 = tk.Scrollbar(tab1, command=studentsReg.yview)
+scrollBar3 = tk.Scrollbar(tab3, command=studentsC.yview)
 scrollBar3.grid(column = 4, 
-               row = 4,
+               row = 3,
                sticky="nsew")
+
+
+buttonText7 = ttk.Button(tab3,text="Update",command=lambda:updateLink()).grid( 
+                               row = 4,
+                               padx = 10,
+                               pady = 10,columnspan=4)#Data update
+
+#---Add elements to Deletion TAB------------------------------------
+
+#text variables
+
+coursesListD=courses_listname()#List of available courses
+studentsListD=students_listname()#List of active students
+studentsCourse=''
+
+
+ttk.Label(tab4, text ="Course:").grid(column = 0, 
+                               row = 0,
+                               padx = 10,
+                               pady = 10)
+
+idCourseD = ttk.Combobox(tab4,state='readonly')
+idCourseD.grid(column = 1,row = 0,padx = 10,pady = 10)
+idCourseD['values']=coursesListD
+
+
+ttk.Label(tab4, text ="Student:").grid(column = 3, 
+                               row = 0,
+                               padx = 10,
+                               pady = 10)
+
+idStudentD = ttk.Combobox(tab4,state='readonly')
+idStudentD.grid(column = 4,row = 0,padx = 10,pady = 10)
+idStudentD['values']=studentsListD
+
+
+buttonText5 = ttk.Button(tab4,text="Delete Course",command=lambda:deletion(idCourseD.current(),'courses')).grid(column = 0,
+                               row = 1,
+                               padx = 10,
+                               pady = 10,columnspan=2)#Check students
+
+
+buttonText6 = ttk.Button(tab4,text="Delete Student",command=lambda:deletion(idStudentD.current(),'students')).grid(column = 2,
+                               row = 1,
+                               padx = 10,
+                               pady = 10,columnspan=2)#Course suscription
+
+buttonText8 = ttk.Button(tab4,text="Update",command=lambda:updateDeletion()).grid( 
+                               row = 2,
+                               padx = 10,
+                               pady = 10,columnspan=4)#Data update
 
 
 

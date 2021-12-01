@@ -261,4 +261,22 @@ def check_course(course): #Students list creation as a string
     else:
         return studentsR
 
-print(check_course('Salsa'))
+
+#--------Delete records on the DB
+def delete(parameter, field):
+    cont=0
+    if (checkExist('database.json')) == True:
+        with open('database.json') as json_file:
+            db = json.load(json_file)
+            for item in db[field]:
+                if cont == parameter:
+                    db[field].pop(cont)
+                    break
+                cont+=1
+
+            with open('database.json','w') as json_file:
+                json.dump(db, json_file)
+                
+    else:
+         print("No records on Database")   
+
