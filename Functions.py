@@ -18,7 +18,7 @@ def students_list(): #Students list creation as a string
     if (checkExist('database.json')) == True:
         with open('database.json') as json_file:
             db = json.load(json_file)
-            if db['students']:
+            if 'students' in db.keys():
                 for item in db['students']:
                     valList=list(item.values())
                     for element in valList:
@@ -38,11 +38,11 @@ def courses_list(): #Courses list creation as a string
         with open('database.json') as json_file:
             db = json.load(json_file)
 
-            if db['courses']:
+            if 'courses' in db.keys():
                 for item in db['courses']:
                     valList=list(item.values())
                     for element in valList:
-                        coursesR += str(element) + ' - '
+                       coursesR += str(element) + ' - '
                     coursesR += '\n\n'
 
                 return coursesR
@@ -50,7 +50,7 @@ def courses_list(): #Courses list creation as a string
                 return coursesR
                 
     else:
-        return studentsR
+        return coursesR
 
     
 ##-------------Add new students
@@ -61,16 +61,29 @@ def add_student(name,document,email,phone):
 
             db = json.load(json_file)
             iD=0
-            for item in db['students']:
-                iD += 1
+            if 'students' in db.keys():
+                for item in db['students']:
+                    iD += 1
+                
+                data = {
+                            'id':iD,
+                            'name':name,
+                            'document':document,
+                            'email':email,
+                            'phone':phone
+                        }
+
+            else:
+                db['students']=[]
             
-            data = {
-                        'id':iD,
-                        'name':name,
-                        'document':document,
-                        'email':email,
-                        'phone':phone
-                    }
+                data = {
+                            'id':0,
+                            'name':name,
+                            'document':document,
+                            'email':email,
+                            'phone':phone
+                        }
+                
             db['students'].append(data)
                  
             
@@ -95,23 +108,34 @@ def add_student(name,document,email,phone):
                 json.dump(db, json_file)
 
 ##-------------Add new courses
-def add_course(name,document,email,phone):
+def add_course(name,description,classes):
     if (checkExist('database.json')) == True:
         
         with open('database.json') as json_file:
 
             db = json.load(json_file)
             iD=0
-            for item in db['students']:
-                iD += 1
+            if 'courses' in db.keys():
+                for item in db['courses']:
+                    iD += 1
+                
+                data = {
+                            'id':iD,
+                            'name':name,
+                            'document':description,
+                            'email':classes,
+                        }
+            else:
+                db['courses']=[]
             
-            data = {
-                        'id':iD,
-                        'name':name,
-                        'document':document,
-                        'email':email,
-                        'phone':phone
-                    }
+                data = {
+                            'id':0,
+                            'name':name,
+                            'document':description,
+                            'email':classes,
+                        }
+
+                
             db['courses'].append(data)
             
             with open('database.json','w') as json_file:
@@ -125,11 +149,116 @@ def add_course(name,document,email,phone):
             data = {
                         'id':0,
                         'name':name,
-                        'document':document,
-                        'email':email,
-                        'phone':phone
+                        'document':description,
+                        'email':classes,
                     }
             db['courses'].append(data)
             
             with open('database.json','w') as json_file:
-                json.dump(db, json_file) 
+                json.dump(db, json_file)
+
+#------Adding students to courses
+def sign_up(name,course):
+    if (checkExist('database.json')) == True:
+        
+        with open('database.json') as json_file:
+
+            db = json.load(json_file)
+            iD=0
+            if 'link' in db.keys():
+                for item in db['link']:
+                    iD += 1
+                
+                data = {
+                            'id':iD,
+                            'name':name,
+                            'course':course
+                        }
+            else:
+                db['link']=[]
+            
+                data = {
+                            'id':0,
+                            'name':name,
+                            'course':course
+                        }
+
+                
+            db['link'].append(data)
+            
+            with open('database.json','w') as json_file:
+                json.dump(db, json_file)
+                
+    else:
+        
+            db = {}
+            db['link']=[]
+            
+            data = {
+                        'id':0,
+                        'name':name,
+                        'course':course
+                    }
+            db['link'].append(data)
+            
+            with open('database.json','w') as json_file:
+                json.dump(db, json_file)
+
+
+#-----Courses' name list for dropdown menu----
+def courses_listname():  
+    coursesR=[]
+    if (checkExist('database.json')) == True:
+        with open('database.json') as json_file:
+            db = json.load(json_file)
+
+            if 'courses' in db.keys():
+                for item in db['courses']:
+                    coursesR.append(item['name'])
+                    
+
+                return coursesR
+            else:
+                return coursesR
+                
+    else:
+        return coursesR
+
+    
+#-----Students' name list for dropdown menu----
+def students_listname(): #Students list creation as a string
+    studentsR=[]
+    if (checkExist('database.json')) == True:
+        with open('database.json') as json_file:
+            db = json.load(json_file)
+            if 'students' in db.keys():
+                for item in db['students']:
+                    studentsR.append(item['name'])
+
+                return studentsR
+            else:
+                return studentsR
+                
+    else:
+        return studentsR
+
+#-------Students list for an specific course
+def check_course(course): #Students list creation as a string
+    studentsR=""
+    if (checkExist('database.json')) == True:
+        with open('database.json') as json_file:
+            db = json.load(json_file)
+            if 'link' in db.keys():
+                for item in db['link']:
+                    if item['course'] == course:
+                        studentsR += str(item['name']) 
+                        studentsR += '\n\n'
+
+                return studentsR
+            else:
+                return studentsR
+                
+    else:
+        return studentsR
+
+print(check_course('Salsa'))
